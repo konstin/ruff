@@ -140,15 +140,15 @@ impl<'src, 'loc> UselessSuppressionComments<'src, 'loc> {
         if comment.kind == SuppressionKind::Off || comment.kind == SuppressionKind::On {
             if let Some(
                 AnyNodeRef::StmtClassDef(StmtClassDef {
-                    name,
-                    decorator_list,
-                    ..
-                })
+                                             name,
+                                             decorator_list,
+                                             ..
+                                         })
                 | AnyNodeRef::StmtFunctionDef(StmtFunctionDef {
-                    name,
-                    decorator_list,
-                    ..
-                }),
+                                                  name,
+                                                  decorator_list,
+                                                  ..
+                                              }),
             ) = comment.enclosing
             {
                 if comment.line_position.is_own_line() && comment.range.start() < name.start() {
@@ -195,7 +195,7 @@ impl<'src, 'loc> UselessSuppressionComments<'src, 'loc> {
         self.captured.sort_by_key(|(t, _)| t.start());
     }
 
-    fn ignored_comments(&self) -> impl Iterator<Item = (TextRange, IgnoredReason)> + '_ {
+    fn ignored_comments(&self) -> impl Iterator<Item=(TextRange, IgnoredReason)> + '_ {
         self.captured.iter().map(|(r, i)| (*r, *i))
     }
 }
@@ -275,7 +275,8 @@ const fn is_valid_enclosing_node(node: AnyNodeRef) -> bool {
         | AnyNodeRef::StmtIpyEscapeCommand(_)
         | AnyNodeRef::ExceptHandlerExceptHandler(_)
         | AnyNodeRef::MatchCase(_)
-        | AnyNodeRef::ElifElseClause(_) => true,
+        | AnyNodeRef::ElifElseClause(_)
+        | AnyNodeRef::StmtCrement(_) => true,
 
         AnyNodeRef::ExprBoolOp(_)
         | AnyNodeRef::ExprNamed(_)
